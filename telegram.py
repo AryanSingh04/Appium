@@ -71,13 +71,11 @@ def telegram_search(phone_number, contact_name):
 
     finally:
         try:
-            print("close")
-            # Close the app at the end of the script
+          
             driver.terminate_app('org.telegram.messenger.web')
 
         finally:
-            print("quit")
-            # Quit the driver to end the session
+           
             driver.quit()
 
 

@@ -27,7 +27,15 @@ try:
      
      driver.switch_to.active_element.send_keys("8105664625")
      driver.find_element(By.CSS_SELECTOR,"._1k3JO2").click()
-   
+     try:
+     
+      hold = WebDriverWait(driver, 4).until(EC.presence_of_element_located((By.ID,'px-captcha')))
+      ActionChains(driver).click_and_hold(hold).perform()
+      time.sleep(9)
+      ActionChains(driver).release().perform()
+     except Exception as e:
+      print("Hold wala button nahi hai")
+     finally:
      try:
        contiune = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.LINK_TEXT, "Existing User? Log in")))
        print("User is not register")

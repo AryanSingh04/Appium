@@ -1,0 +1,44 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.edge.service import Service
+from selenium.webdriver.edge.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
+import time
+
+def times_india(email_id):
+    # Provide the full path to the msedgedriver.exe file
+    path = r"C:\Program Files (x86)\msedgedriver.exe"
+
+    # Create Edge options
+    edge_options = Options()
+
+    # Create a WebDriver instance with the specified options and path
+    driver = webdriver.Edge(service=Service(path), options=edge_options)
+
+    driver.get('https://indianexpress.com/login/')
+
+    try:
+        input_email = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="textNumberInput"]')))
+        input_email.send_keys(email_id)
+        _continue = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="multiAuthSubmit"]')))
+        _continue.click()
+        password = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="horizontal_password"]')))
+        password.send_keys("Sample@01")
+        button = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="loginRecaptcha"]')))
+        button.click()
+        try:
+            time.sleep(4)
+            msg =  driver.find_element(By.XPATH, './/a[contains(text(), "Click here")]')
+            print("Account Not Found:",email_id)
+        except Exception as e:
+            print("Account Found:",email_id)
+    except Exception as e:
+        print("An error occurred: ", str(e))
+    finally:
+        driver.quit()
+
+
+# times_india("erg2570@gmail.com")
+# times_india("teamaryansingh04@gmail.com")

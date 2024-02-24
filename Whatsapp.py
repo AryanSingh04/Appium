@@ -1,3 +1,5 @@
+import time
+
 from appium import webdriver
 from typing import Any, Dict
 from appium.options.common import AppiumOptions
@@ -52,6 +54,7 @@ def automate_whatsapp(phone_number):
           print(status.text)
          except Exception as e:
           print("No Status")
+         print("Link to chat", f"https://wa.me/+91{phone_number}")
          profile_picture_element = WebDriverWait(driver, 10).until(
              EC.presence_of_element_located((AppiumBy.ID, 'com.whatsapp:id/wds_profile_picture')))
          profile_picture_element.click()
@@ -62,11 +65,10 @@ def automate_whatsapp(phone_number):
              navigate_back = WebDriverWait(driver, 10).until(
                  EC.presence_of_element_located(
                      (AppiumBy.XPATH, '//android.widget.ImageButton[@content-desc="Navigate up"]')))
-             navigate_back.click()
 
          except Exception as e:
              print("No profile photo found")
-         print("Link to chat",f"https://wa.me/{s.text}")
+
         except Exception as e:
             print(f"{phone_number} is not on WhatsApp")
 
@@ -74,7 +76,7 @@ def automate_whatsapp(phone_number):
         print(f"An error occurred: {str(e)}")
 
     finally:
-        driver.terminate_app('com.whatsapp')
+        # driver.terminate_app('com.whatsapp')
         driver.quit()
         print("Script executed")
 

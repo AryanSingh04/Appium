@@ -1,26 +1,41 @@
 import time
-
 from appium import webdriver
+from appium.webdriver.webdriver import WebDriver
 from typing import Any, Dict
 from appium.options.common import AppiumOptions
 from appium.webdriver.common.appiumby import AppiumBy
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+def capture_element_screenshot(driver: WebDriver,bounds:str, file_name):
+    # Get the location and size of the element
+    bounds_values = bounds.split("][")
+    left, top = map(int, bounds_values[0].strip("[").split(","))
+    right, bottom = map(int, bounds_values[1].strip("]").split(","))
+
+    # Take a screenshot of the entire screen
+    screenshot = driver.get_screenshot_as_png()
+    
+    # Crop the screenshot to the element's location and size
+    from PIL import Image
+    from io import BytesIO
+    
+    screenshot = Image.open(BytesIO(screenshot))
+    element_screenshot = screenshot.crop((left, top, right, bottom))
+    
+    # Save the element screenshot
+    element_screenshot.save(file_name)
+
 def automate_whatsapp(phone_number):
     cap: Dict[str, Any] = {
         "platformName": "Android",
-        "appium:platformVersion": "8.0",
+        "appium:platformVersion": "14.0",
         "deviceName": "emulator-5554",
         "automationName": "UIAutomator2",
     }
-
     url = "http://localhost:4723"
     driver = webdriver.Remote(url, options=AppiumOptions().load_capabilities(cap))
     try:
-        # driver = webdriver.Remote(url, options=AppiumOptions().load_capabilities(cap))
-        driver.set_app_language('en')
-        driver.set_app_locale('US')
         driver.terminate_app('com.whatsapp')
         driver.activate_app('com.whatsapp')
         new_chat_button = WebDriverWait(driver, 10).until(
@@ -59,9 +74,10 @@ def automate_whatsapp(phone_number):
              EC.presence_of_element_located((AppiumBy.ID, 'com.whatsapp:id/wds_profile_picture')))
          profile_picture_element.click()
          try:
-             WebDriverWait(driver, 10).until(
-                 EC.presence_of_element_located((AppiumBy.ID, 'com.whatsapp:id/picture_animation')))
-             driver.save_screenshot(f"{s.text}.png")
+             bounds = WebDriverWait(driver, 10).until(
+                 EC.presence_of_element_located((AppiumBy.ID, 'com.whatsapp:id/picture_animation'))).get_attribute('bounds')
+             capture_element_screenshot(driver,bounds,f"{s.text}.png")
+             profile_picture_element.take_snapshot()
              navigate_back = WebDriverWait(driver, 10).until(
                  EC.presence_of_element_located(
                      (AppiumBy.XPATH, '//android.widget.ImageButton[@content-desc="Navigate up"]')))

@@ -163,4 +163,4 @@ def automate_whatsapp(country_code, phone_number,naam):
 # Example usage:
 country_code = "+91"
 phone_number_to_search = "8108665665"
-automate_whatsapp(country_code, phone_number_to_search,"majedaar")
+automate_whatsapp(country_code, phone_number_to_search,"appium")

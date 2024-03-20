@@ -73,6 +73,13 @@ def scrape_LinkedIn(email,name):
         EC.visibility_of_element_located((By.XPATH, '//div[contains(@class, "displayName")]')))
      print("Name:",displayNAme.text)
      try:
+      loc =  WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//div[contains(@class, "locationAndConnections")]')))
+      print("Location:",loc.text)
+      # cod.get_coordinates(loc.text)
+     except Exception:
+      print("No Location")
+     try:
       title =  WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located((By.XPATH, '//div[contains(@data-log-name, "Title")]')))
       print("Title:",title.text)

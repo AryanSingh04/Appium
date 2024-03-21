@@ -37,6 +37,25 @@ def automate_botim(phone_number):
     url = "http://localhost:4723"
     driver = webdriver.Remote(url, options=AppiumOptions().load_capabilities(cap))
     try:
+        driver.terminate_app("com.google.android.dialer")
+        time.sleep(1)
+        driver.activate_app("com.google.android.dialer")
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.google.android.dialer:id/contact_name" and @text="Create new contact"]'))).click()
+        name =WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((AppiumBy.XPATH, '//android.widget.EditText[@text="First name"]')))  
+        name.send_keys("Appium Save")   
+        phn =WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((AppiumBy.XPATH, '//android.widget.EditText[@text="Phone"]')))  
+        phn.send_keys(phone_number)  
+       #  save Button click 
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((AppiumBy.XPATH, '//android.widget.Button[@resource-id="com.google.android.contacts:id/toolbar_button"]'))).click()
+        driver.terminate_app("im.thebot.messenger")
+        time.sleep(5)
+    except:
+           print("failed to save the contact")  
+    try:
      driver.terminate_app("im.thebot.messenger")
      time.sleep(1)
      driver.activate_app("im.thebot.messenger")
@@ -77,3 +96,22 @@ def automate_botim(phone_number):
      driver.terminate_app("im.thebot.messenger")
     except:
         print("Some Error in app")
+    try:
+      driver.activate_app("com.google.android.dialer") 
+      WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.google.android.dialer:id/open_search_bar_text_view"] '))).click()
+      
+      WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((AppiumBy.XPATH, '//android.widget.EditText[@resource-id="com.google.android.dialer:id/open_search_view_edit_text"]'))).send_keys(phone_number)
+      WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.google.android.dialer:id/contact_header"]'))).click()
+      time.sleep(1)
+      WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((AppiumBy.XPATH, '//android.widget.ImageView[@content-desc="More options"]'))).click()
+      WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.google.android.contacts:id/title" and @text="Delete"]'))).click()
+      WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((AppiumBy.XPATH, '//android.widget.Button[@resource-id="android:id/button1"]'))).click()
+      
+    except Exception as e:
+         print("Couldn't Delete the contact",e) 

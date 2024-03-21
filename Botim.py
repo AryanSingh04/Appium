@@ -7,7 +7,7 @@ from appium.webdriver.common.appiumby import AppiumBy
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# Need to add logic for adding the contact and deleting the contact
+# Added logic for adding the contact and deleting the contact
 
 def capture_element_screenshot(driver: WebDriver,bounds:str, file_name):
     # Get the location and size of the element
